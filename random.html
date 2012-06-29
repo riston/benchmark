@@ -1,0 +1,35 @@
+<!--<script type="text/javascript" src="http://www.broofa.com/Tools/JSLitmus/JSLitmus.js"></script>-->
+<script>
+
+var Random = {
+
+  /**
+   * Numbers between ~( -2 to 2 )
+   * http://stackoverflow.com/questions/75677/converting-a-uniform-distribution-to-a-normal-distribution
+   * http://c-faq.com/lib/gaussian.html
+   */
+  gaussian: function() {
+    var x1, x2, r;
+
+    do {
+      x1 = 2 * Math.random() - 1;
+      x2 = 2 * Math.random() - 1;
+      r = x1 * x1 + x2 * x2;      
+      // Check if generated number is range [0,1]
+    } while (r >= 1 || r === 0);
+    return Math.sqrt(-2 * Math.log(r) / r) * x1;
+  },
+
+  normalDist: function(mean, stdDev) {
+    return mean + (this.gaussian() * stdDev);
+  }
+};
+for (var i = -20; i <= 20; i += .25) 
+  document.write(Random.normalDist(0, i) + '<br />');
+
+/*
+JSLitmus.test('DOM element creation', function() {
+  document.createElement('div');
+});
+*/
+</script>

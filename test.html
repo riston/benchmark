@@ -1,0 +1,140 @@
+<script type="text/javascript" src="http://www.broofa.com/Tools/JSLitmus/JSLitmus.js"></script>
+<script type="text/javascript" src="http://zeptojs.com/zepto.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script>
+var j = jQuery.noConflict();
+/*
+ * Simple DOM object creation without adding to html.
+ */
+JSLitmus.test('DOM element creation', function() {
+	document.createElement('div');
+});
+
+JSLitmus.test('jQuery selector element creation', function() {
+	j('<div>', { });
+});
+
+JSLitmus.test('Zepto.js selector element creation', function() {
+	$('<div>');
+});
+
+/*
+ * Adding element attribute
+ */
+JSLitmus.test('DOM adding element attribute', function() {
+	var element = document.createElement('div');
+	element.setAttribute('class', 'box');
+});
+
+JSLitmus.test('jQuery selector element attribute ', function() {
+	j('<div>', {  class: 'box' });
+});
+
+JSLitmus.test('Zepto.js selector element attribute ', function() {
+	$('<div>').addClass('box');
+});
+
+
+/**
+ * Appending and removing.
+ */
+JSLitmus.test('DOM appending element and remove', function() {
+	var element = document.createElement('span')
+	  , body = document.getElementsByTagName('body')[0]; // Get the first body tag
+
+	// Each iteration makes some DOM finding also, but make sure we add only one
+	if (document.getElementsByTagName('span').length <= 0) {
+		element.setAttribute('class', 'box');
+		body.appendChild(element);
+
+		// item is added, now remove for next test
+		body.removeChild(element);
+	}
+});
+
+JSLitmus.test('jQuery append element and remove', function() {
+	var element = j('<span>', {  class: 'box' })
+	  , jbody = j('body')
+	  , jspan = jbody.find('span');
+
+	if (jspan.length <= 0) {
+		jbody.append(element);	
+		jbody.find('span').remove();
+	}
+});
+
+JSLitmus.test('Zepto.js append element and remove', function() {
+	var element = $('<span class="span">')
+	  , $body = $('body')
+	  , $span = $body.find('span');
+
+	if ($span.length <= 0) {
+		$body.append(element);	
+		$body.find('span').remove();
+	}
+});
+
+
+var results = ['apple', 'pear', 'banana', 'cabbage']
+/*
+ * Structure:
+ * <div>
+ *  <ul>
+ *   <li>...</li>
+ *  </ul>
+ * </div>
+ */
+JSLitmus.test('DOM creating element div and list', function() {
+	var result = document.getElementById('result');
+
+	// Each iteration makes some DOM finding also, but make sure we add only one
+	if (result.childNodes.length <= 0) {
+		var list = document.createElement('ul')
+		  , itemList = '';
+
+		for (var i = 0; i < results.length; i++) {
+			// Use the string method to create elements, not best if you need more attributes
+			itemList += '<li>' + results[i] + '</li>';
+		}
+
+		list.innerHTML = itemList;
+		result.appendChild(list);
+
+		// item is added, now remove for next test
+		result.innerHTML = '';
+	}
+});
+
+JSLitmus.test('jQuery creating element div and list', function() {
+
+	var jresult = j('#result');
+	if (jresult.children().length <= 0) {
+		var jul = j('<ul>')
+		  , itemList = '';
+
+		for (var i = 0; i < results.length; i++) {
+			// well appending items to list is 2x times slower
+			itemList += '<li>' + results[i] + '</li>';
+		}
+		jresult.html(itemList);
+		jresult.children().remove();
+	}
+});
+
+JSLitmus.test('Zepto.js creating element div and list', function() {
+
+	var $result = $('#result');
+	if ($result.children().length <= 0) {
+		var $ul = $('<ul>'), itemList = '';
+
+		for (var i = 0; i < results.length; i++) {
+			// well appending items to list is 2x times slower
+			itemList += '<li>' + results[i] + '</li>';
+		}
+		$result.html(itemList);
+		$result.children().remove();
+	}
+});
+</script>
+
+<div id="result"></div>
